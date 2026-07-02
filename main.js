@@ -310,6 +310,8 @@ async function loadAllData(dataSource = 'default') {
         
         // 重建题目分数映射表（数据源切换后必须重建）
         rebuildQuestionScoreMap();
+        // 静态部署没有 /api/analyze 返回的 analysisData，这里用本地 JSON 标记为可渲染状态。
+        analysisData = analysisData || { source: 'static-json', knowledge_analysis: null };
         
         console.log('全部数据文件加载完成');
         console.log('数据源:', dataSource);
@@ -1079,6 +1081,13 @@ function initializeCharts() {
 // 加载已有数据
 function loadExistingData() {
     console.log('正在加载已有数据...');
+
+    if (dataLoaded) {
+        console.log('已加载静态数据，跳过后端 /api/load-data，直接刷新图表。');
+        analysisData = analysisData || { source: 'static-json', knowledge_analysis: null };
+        updateAllCharts();
+        return;
+    }
     
     fetch('/api/load-data', {
         method: 'GET',
@@ -1107,7 +1116,7 @@ function loadExistingData() {
 
 // 更新所有图表
 function updateAllCharts() {
-    if (!analysisData) {
+    if (!analysisData && !dataLoaded) {
         console.warn('没有分析数据，无法更新图表');
         return;
     }
@@ -4907,7 +4916,7 @@ function setupRadarControls() {
 
 // 更新雷达图
 function updateRadarChart() {
-    if (!analysisData) return;
+    if (!analysisData && !dataLoaded) return;
     
     // 检查D3.js是否已加载（虽然雷达图主要使用原生SVG，但为了一致性检查）
     const svgElement = document.getElementById('radar-svg');
