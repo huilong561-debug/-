@@ -1,0 +1,60 @@
+[
+    {
+        "questionId": "Q1",
+        "original": "写出关系模式 T 的基本函数依赖集和候选码",
+        "errorType": "术语歧义",
+        "issue": "\"基本函数依赖集\" 无统一行业定义，部分教材指 \"原始依赖集\"，部分指 \"最小函数依赖集\"，易引发理解偏差。",
+        "revised": "写出关系模式 T 的最小函数依赖集和候选码",
+        "improvement": "采用数据库规范化理论中的标准术语 \"最小函数依赖集\"，明确评分锚点，避免因教材差异导致的作答偏差。"
+    },
+    {
+        "questionId": "Q10",
+        "original": "SQL 删除 \"作者名为'张三'的出版信息\"",
+        "errorType": "语法表述模糊",
+        "issue": "未明确 \"出版信息\" 对应的具体表名（如 Publishes 表），且未说明外键约束处理逻辑，不符合 SQL 语句的严谨性要求。",
+        "revised": "SQL 删除 Publishes 表中 \"作者名为'张三'的出版信息\"（假设无外键关联）",
+        "improvement": "补充表名使操作对象明确，添加场景假设规避外键约束导致的执行错误，符合 \"SQL 语句需明确操作对象\" 的语法规范。"
+    },
+    {
+        "questionId": "Q14",
+        "original": "在 Teacher 表 Tname 字段上建立唯一非聚索引 IDX_Tname",
+        "errorType": "术语错误",
+        "issue": "\"非聚索引\" 为不规范简称，标准 SQL 术语应为 \"非聚集索引\"，且未说明命名规范。",
+        "revised": "在 Teacher 表 Tname 字段上建立唯一非聚集索引 IDX_Teacher_Tname",
+        "improvement": "修正为 SQL Server 标准术语 \"非聚集索引\"，索引名称添加 \"表名\" 前缀，符合数据库对象命名的可读性原则。"
+    },
+    {
+        "questionId": "Q17",
+        "original": "创建默认对象 de_teacher（值为 \"副教授\"），绑定到 Teacher 表 Title 列",
+        "errorType": "术语过时",
+        "issue": "\"默认对象\" 是 SQL Server 早期语法，现代版本推荐使用 \"DEFAULT 约束\"，且未明确约束命名规则。",
+        "revised": "创建 DEFAULT 约束 DF_Teacher_Title（值为 \"副教授\"），绑定到 Teacher 表 Title 列",
+        "improvement": "采用 ANSI SQL 标准的 \"DEFAULT 约束\" 术语，约束名称遵循 \"DF_表名_列名\" 规范，适配现代数据库系统语法要求。"
+    },
+    {
+        "questionId": "Q19",
+        "original": "绘制 E-R 图（学员、教师、知识点、安全知识，含属性、联系类型、标识符）",
+        "errorType": "表述残缺",
+        "issue": "未明确要求标注 \"联系基数\"（如 1:N、M:N），而基数是 E-R 图的核心结构要素，缺失导致设计完整性不足。",
+        "revised": "绘制 E-R 图（学员、教师、知识点、安全知识），含属性、联系类型、标识符及联系基数",
+        "improvement": "补充 \"联系基数\" 要求，符合 E-R 图设计的行业规范，使评分可细化至 \"结构完整性\" 维度，避免主观判分误差。"
+    },
+    {
+        "questionId": "Q21",
+        "original": "SQL 创建 security 数据库及学习表、安全知识表（含存储路径、容量、约束等要求）",
+        "errorType": "语法模糊",
+        "issue": "未明确数据库管理系统（如 SQL Server/MySQL），不同系统的存储路径语法差异显著；\"容量\" 未说明具体指标（初始大小、增长方式）。",
+        "revised": "基于 SQL Server 创建 security 数据库及学习表、安全知识表（含存储路径、初始容量 5MB（自动增长 10%）、约束等要求）",
+        "improvement": "明确 DBMS 类型避免语法适配问题，量化容量指标使操作具备可执行性，符合 \"SQL 实践题需明确环境参数\" 的设计原则。"
+    },
+    {
+        "questionId": "Q22",
+        "original": "为 user2 授予知识点表插入 / 修改权限，收回 user1 安全知识表查询 / 修改权限",
+        "errorType": "表述歧义",
+        "issue": "未明确权限粒度（表级 / 列级），也未说明是否包含权限传递（GRANT OPTION），易导致作答逻辑不唯一。",
+        "revised": "为 user2 授予知识点表的表级插入、修改权限；收回 user1 安全知识表的表级查询、修改权限",
+        "improvement": "明确 \"表级\" 权限粒度，排除权限传递歧义，符合 SQL 权限管理语句的严谨性要求，确保答案唯一性。"
+    }
+]
+
+

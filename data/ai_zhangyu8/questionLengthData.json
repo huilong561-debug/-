@@ -1,0 +1,48 @@
+[
+  {
+    "id": "I",
+    "name": "单项选择题",
+    "description": 10,
+    "subQuestions": [
+      42,
+      285,
+      68,
+      95,
+      53,
+      112,
+      78,
+      86,
+      310,
+      64
+    ],
+    "total": 1193
+  },
+  {
+    "id": "II",
+    "name": "填空题",
+    "description": 6,
+    "subQuestions": [
+      35,
+      72,
+      48,
+      95,
+      56,
+      82
+    ],
+    "total": 394
+  },
+  {
+    "id": "III",
+    "name": "解答题",
+    "description": 6,
+    "subQuestions": [
+      118,
+      165,
+      142,
+      178,
+      195,
+      420
+    ],
+    "total": 1224
+  }
+]

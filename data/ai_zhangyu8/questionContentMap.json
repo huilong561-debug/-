@@ -1,0 +1,112 @@
+{
+  "Q1": {
+    "label": "I(1)",
+    "content": "当 x→0 时，下列无穷小中阶数最高的是……",
+    "score": "5pts"
+  },
+  "Q2": {
+    "label": "I(2)",
+    "content": "设 I₁=∬_{D₁}(x²+y²)dxdy，I₂=∬_{D₂}(x²+y²)dxdy，I₃=∬_{D₃}(x²+y²)dxdy，其中 D₁={(x,y)|x²+y²≤R²}，D₂={(x,y)|x²+y²≤2R²}，D₃={(x,y)||x|≤R,|y|≤R}，R>0，判断其大小顺序……",
+    "score": "5pts"
+  },
+  "Q3": {
+    "label": "I(3)",
+    "content": "设 f(x)=(x-1)¹⁰sin x，求 f⁽¹⁰⁾(1)=……",
+    "score": "5pts"
+  },
+  "Q4": {
+    "label": "I(4)",
+    "content": "求曲线 x³−y³=3x² 的斜渐近线……",
+    "score": "5pts"
+  },
+  "Q5": {
+    "label": "I(5)",
+    "content": "设 f(x) 在 [0,1] 上单调递增，比较 ∫₀¹f(x)dx 与 ∑_{k=1}ⁿf(k/n)/n 的大小……",
+    "score": "5pts"
+  },
+  "Q6": {
+    "label": "I(6)",
+    "content": "长度为 1 的单位质量细杆，G 为引力常数。将一质点沿杆的延长线从位置 1 移动到位置 2 所做的功为……",
+    "score": "5pts"
+  },
+  "Q7": {
+    "label": "I(7)",
+    "content": "设 f(x) 在 (0,+∞) 上可导；下列命题中有几个正确：① 若 lim_{x→+∞}f'(x) 存在，则 lim_{x→+∞}f(x)/x 存在……",
+    "score": "5pts"
+  },
+  "Q8": {
+    "label": "I(8)",
+    "content": "矩阵 A=[1,2,3;2,4,6;1,1,a] 经初等行变换可化为 [1,0,-1;0,1,2;0,0,0]，求 a 的取值范围……",
+    "score": "5pts"
+  },
+  "Q9": {
+    "label": "I(9)",
+    "content": "已知二次型 f(x₁,x₂,x₃) 在正交变换 x=Py（其中 P=(e₁,e₂,e₃)）下的标准形为 y₁²+y₂²−2y₃²。若 Q=(−e₃,e₂,e₁)，求在变换 x=Qy 下的标准形……",
+    "score": "5pts"
+  },
+  "Q10": {
+    "label": "I(10)",
+    "content": "设 A 为 n×n 矩阵，r(A)=r，Eᵣ 为 r×r 单位矩阵。“A²=A” 是“存在列满秩矩阵 C 使得 A=CB 且 BC=Eᵣ” 的什么条件……",
+    "score": "5pts"
+  },
+  "Q11": {
+    "label": "II(11)",
+    "content": "lim_{x→0}[(1+x)^{1/x}−e]/x = ……",
+    "score": "5pts"
+  },
+  "Q12": {
+    "label": "II(12)",
+    "content": "设 y=ln(1+x²)，求 y''(0)=……",
+    "score": "5pts"
+  },
+  "Q13": {
+    "label": "II(13)",
+    "content": "已知对所有实数 x，不等式 eˣ ≥ 1 + a x 成立，求 a 的取值范围……",
+    "score": "5pts"
+  },
+  "Q14": {
+    "label": "II(14)",
+    "content": "求无界区域 D = {(x, y) | (1 + x²)|y| ≤ 1} 的面积……",
+    "score": "5pts"
+  },
+  "Q15": {
+    "label": "II(15)",
+    "content": "求函数 z = arcsin(y/x) 在点 (-1, 2) 处的全微分 dz = ……",
+    "score": "5pts"
+  },
+  "Q16": {
+    "label": "II(16)",
+    "content": "齐次线性方程组 (I)：x₁ + x₂ + x₃ + x₄ = 0，x₁ + 2x₂ + 3x₃ + 4x₄ = 0；方程组 (II) 的基础解系为 ξ₁ = (2, -1, k+2, 1)，ξ₂ = (-1, 2, 4, k+8)。若两方程组无非零公共解，求 k 的取值范围……",
+    "score": "5pts"
+  },
+  "Q17": {
+    "label": "III(17)",
+    "content": "已知 f(0) = a > 0，f'(0) = b，求极限 lim_{x→0} [f(x) - a]/x²……",
+    "score": "10pts"
+  },
+  "Q18": {
+    "label": "III(18)",
+    "content": "设 y = y(x) 满足微分方程 x²y' + (x² - 3)y² = 0，且 y(1) = 1。（1）求 y = y(x)；（2）计算积分 ∫₁^∞ y(x) dx……",
+    "score": "12pts"
+  },
+  "Q19": {
+    "label": "III(19)",
+    "content": "设 f(x) 连续，T > 0。证明：f(x) 以 T 为周期当且仅当对任意常数 a，积分 ∫_a^{a+T} f(x) dx 为常数……",
+    "score": "12pts"
+  },
+  "Q20": {
+    "label": "III(20)",
+    "content": "计算二重积分 ∬_D (x² + y²) dxdy，其中 D 由曲线 y = x²、y = 4x²、x = y²、x = 4y² 所围成……",
+    "score": "12pts"
+  },
+  "Q21": {
+    "label": "III(21)",
+    "content": "设 f(x, y) = 4x²(x - 2y) + 16y(xy - 3) - 33x，求其在区域 D = {(x, y) | 0 ≤ y ≤ x ≤ 3} 上的取值范围……",
+    "score": "12pts"
+  },
+  "Q22": {
+    "label": "III(22)",
+    "content": "已知矩阵 A = [2,0,0; 0,a,2; 0,2,0] 与 B = [2,0,0; 0,1,0; 0,0,-2] 相似，且方程 Ax = x + (b, -b, 2b) 有解 (0, -1, 1)。求（1）a, b；（2）A¹⁰⁰……",
+    "score": "12pts"
+  }
+}

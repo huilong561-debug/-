@@ -1,0 +1,178 @@
+[
+  {
+    "questionId": "Q1",
+    "knowledgeType": "Conceptual",
+    "bloomGoal": "Apply",
+    "difficulty": "Medium",
+    "questionType": "MCQ",
+    "description": "比较无穷小阶数"
+  },
+  {
+    "questionId": "Q2",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Apply",
+    "difficulty": "Hard",
+    "questionType": "MCQ",
+    "description": "比较二重积分"
+  },
+  {
+    "questionId": "Q3",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Apply",
+    "difficulty": "Medium",
+    "questionType": "MCQ",
+    "description": "高阶导数计算"
+  },
+  {
+    "questionId": "Q4",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Apply",
+    "difficulty": "Medium",
+    "questionType": "MCQ",
+    "description": "斜渐近线方程"
+  },
+  {
+    "questionId": "Q5",
+    "knowledgeType": "Conceptual",
+    "bloomGoal": "Analyze",
+    "difficulty": "Hard",
+    "questionType": "MCQ",
+    "description": "单调函数积分性质"
+  },
+  {
+    "questionId": "Q6",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Apply",
+    "difficulty": "Medium",
+    "questionType": "MCQ",
+    "description": "引力做功计算"
+  },
+  {
+    "questionId": "Q7",
+    "knowledgeType": "Conceptual",
+    "bloomGoal": "Analyze",
+    "difficulty": "Hard",
+    "questionType": "MCQ",
+    "description": "函数极限与有界性"
+  },
+  {
+    "questionId": "Q8",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Apply",
+    "difficulty": "Medium",
+    "questionType": "MCQ",
+    "description": "矩阵初等变换参数"
+  },
+  {
+    "questionId": "Q9",
+    "knowledgeType": "Conceptual",
+    "bloomGoal": "Apply",
+    "difficulty": "Hard",
+    "questionType": "MCQ",
+    "description": "二次型标准形变换"
+  },
+  {
+    "questionId": "Q10",
+    "knowledgeType": "Conceptual",
+    "bloomGoal": "Analyze",
+    "difficulty": "Hard",
+    "questionType": "MCQ",
+    "description": "矩阵秩与分解条件"
+  },
+  {
+    "questionId": "Q11",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Apply",
+    "difficulty": "Medium",
+    "questionType": "Blank",
+    "description": "极限计算"
+  },
+  {
+    "questionId": "Q12",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Apply",
+    "difficulty": "Medium",
+    "questionType": "Blank",
+    "description": "导数计算"
+  },
+  {
+    "questionId": "Q13",
+    "knowledgeType": "Conceptual",
+    "bloomGoal": "Apply",
+    "difficulty": "Medium",
+    "questionType": "Blank",
+    "description": "不等式参数范围"
+  },
+  {
+    "questionId": "Q14",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Apply",
+    "difficulty": "Hard",
+    "questionType": "Blank",
+    "description": "平面区域面积计算"
+  },
+  {
+    "questionId": "Q15",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Apply",
+    "difficulty": "Medium",
+    "questionType": "Blank",
+    "description": "全微分计算"
+  },
+  {
+    "questionId": "Q16",
+    "knowledgeType": "Conceptual",
+    "bloomGoal": "Analyze",
+    "difficulty": "Hard",
+    "questionType": "Blank",
+    "description": "线性方程组公共解参数"
+  },
+  {
+    "questionId": "Q17",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Apply",
+    "difficulty": "Medium",
+    "questionType": "Solution",
+    "description": "极限计算与导数应用"
+  },
+  {
+    "questionId": "Q18",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Apply",
+    "difficulty": "Medium",
+    "questionType": "Solution",
+    "description": "微分方程求解与积分"
+  },
+  {
+    "questionId": "Q19",
+    "knowledgeType": "Conceptual",
+    "bloomGoal": "Analyze",
+    "difficulty": "Hard",
+    "questionType": "Solution",
+    "description": "周期函数性质证明"
+  },
+  {
+    "questionId": "Q20",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Apply",
+    "difficulty": "Medium",
+    "questionType": "Solution",
+    "description": "二重积分计算"
+  },
+  {
+    "questionId": "Q21",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Apply",
+    "difficulty": "Hard",
+    "questionType": "Solution",
+    "description": "多元函数极值"
+  },
+  {
+    "questionId": "Q22",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Apply",
+    "difficulty": "Hard",
+    "questionType": "Solution",
+    "description": "矩阵相似性与幂运算"
+  }
+]

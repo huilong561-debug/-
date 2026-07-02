@@ -1,0 +1,200 @@
+{
+  "1": [
+    {
+      "name": "极限计算",
+      "questions": [
+        { "label": "一(4)", "score": 5 },
+        { "label": "三(17)", "score": 10 },
+        { "label": "三(18)", "score": 6 }
+      ]
+    },
+    {
+      "name": "无穷小量比较",
+      "questions": [
+        { "label": "一(4)", "score": 5 }
+      ]
+    },
+    {
+      "name": "函数连续性与间断点",
+      "questions": [
+        { "label": "一(2)", "score": 5 }
+      ]
+    }
+  ],
+  "2": [
+    {
+      "name": "导数概念与可导性",
+      "questions": [
+        { "label": "一(7)", "score": 5 },
+        { "label": "三(18)", "score": 6 }
+      ]
+    },
+    {
+      "name": "函数极值与拐点判别",
+      "questions": [
+        { "label": "一(2)", "score": 5 }
+      ]
+    },
+    {
+      "name": "曲线渐近线求解",
+      "questions": [
+        { "label": "二(12)", "score": 5 }
+      ]
+    },
+    {
+      "name": "微分中值定理应用",
+      "questions": [
+        { "label": "三(21)", "score": 12 }
+      ]
+    }
+  ],
+  "3": [
+    {
+      "name": "不定积分与定积分计算",
+      "questions": [
+        { "label": "二(11)", "score": 5 },
+        { "label": "二(13)", "score": 5 }
+      ]
+    },
+    {
+      "name": "定积分物理应用",
+      "questions": [
+        { "label": "一(6)", "score": 5 }
+      ]
+    },
+    {
+      "name": "反常积分计算",
+      "questions": [
+        { "label": "二(11)", "score": 5 }
+      ]
+    }
+  ],
+  "4": [
+    {
+      "name": "偏导数与全微分",
+      "questions": [
+        { "label": "一(1)", "score": 5 },
+        { "label": "三(19)", "score": 12 }
+      ]
+    },
+    {
+      "name": "二重积分计算",
+      "questions": [
+        { "label": "一(5)", "score": 5 },
+        { "label": "三(20)", "score": 12 }
+      ]
+    },
+    {
+      "name": "多元函数极值",
+      "questions": [
+        { "label": "三(19)", "score": 12 }
+      ]
+    }
+  ],
+  "5": [
+    {
+      "name": "一阶微分方程求解",
+      "questions": [
+        { "label": "二(15)", "score": 5 }
+      ]
+    },
+    {
+      "name": "二阶线性微分方程",
+      "questions": [
+        { "label": "一(3)", "score": 5 }
+      ]
+    },
+    {
+      "name": "参数方程导数计算",
+      "questions": [
+        { "label": "二(14)", "score": 5 }
+      ]
+    }
+  ],
+  "6": [
+    {
+      "name": "行列式性质与计算",
+      "questions": [
+        { "label": "一(8)", "score": 5 }
+      ]
+    }
+  ],
+  "7": [
+    {
+      "name": "矩阵初等变换",
+      "questions": [
+        { "label": "一(9)", "score": 5 }
+      ]
+    },
+    {
+      "name": "矩阵的秩",
+      "questions": [
+        { "label": "一(10)", "score": 5 }
+      ]
+    },
+    {
+      "name": "逆矩阵与伴随矩阵",
+      "questions": [
+        { "label": "三(22)", "score": 4 }
+      ]
+    }
+  ],
+  "8": [
+    {
+      "name": "向量组线性相关性",
+      "questions": [
+        { "label": "二(16)", "score": 5 }
+      ]
+    },
+    {
+      "name": "极大线性无关组与秩",
+      "questions": [
+        { "label": "二(16)", "score": 5 }
+      ]
+    }
+  ],
+  "9": [
+    {
+      "name": "线性方程组解的结构",
+      "questions": [
+        { "label": "一(10)", "score": 5 },
+        { "label": "二(16)", "score": 5 }
+      ]
+    },
+    {
+      "name": "线性方程组求解",
+      "questions": [
+        { "label": "二(16)", "score": 5 }
+      ]
+    }
+  ],
+  "10": [
+    {
+      "name": "特征值与特征向量",
+      "questions": [
+        { "label": "一(8)", "score": 5 },
+        { "label": "三(22)", "score": 4 }
+      ]
+    },
+    {
+      "name": "矩阵相似对角化",
+      "questions": [
+        { "label": "三(22)", "score": 4 }
+      ]
+    }
+  ],
+  "11": [
+    {
+      "name": "二次型合同变换",
+      "questions": [
+        { "label": "三(22)", "score": 12 }
+      ]
+    },
+    {
+      "name": "二次型标准形",
+      "questions": [
+        { "label": "三(22)", "score": 12 }
+      ]
+    }
+  ]
+}

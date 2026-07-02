@@ -1,0 +1,33 @@
+[
+    {
+        "id": "一",
+        "name": "选择题",
+        "description": 85,
+        "subQuestions": [45, 185, 120, 145, 210, 165, 195, 95, 135, 125],
+        "total": 1505
+    },
+    {
+        "id": "二",
+        "name": "填空题",
+        "description": 55,
+        "subQuestions": [52, 48, 62, 95, 68, 85],
+        "total": 465
+    },
+    {
+        "id": "三",
+        "name": "解答题",
+        "description": 45,
+        "subQuestions": [72, 98, 115, 105, 125, 135],
+        "total": 695
+    }
+]
+
+
+
+
+
+
+
+
+
+

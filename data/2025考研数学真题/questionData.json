@@ -1,0 +1,178 @@
+[
+  {
+    "questionId": "Q1",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Apply",
+    "difficulty": "Medium",
+    "questionType": "MCQ",
+    "description": "隐函数偏导数乘积计算"
+  },
+  {
+    "questionId": "Q2",
+    "knowledgeType": "Conceptual",
+    "bloomGoal": "Analyze",
+    "difficulty": "Medium",
+    "questionType": "MCQ",
+    "description": "函数极值点与曲线拐点判别"
+  },
+  {
+    "questionId": "Q3",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Analyze",
+    "difficulty": "Hard",
+    "questionType": "MCQ",
+    "description": "二阶常系数齐次微分方程解的收敛性分析"
+  },
+  {
+    "questionId": "Q4",
+    "knowledgeType": "Conceptual",
+    "bloomGoal": "Understand",
+    "difficulty": "Medium",
+    "questionType": "MCQ",
+    "description": "高阶无穷小量性质应用"
+  },
+  {
+    "questionId": "Q5",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Apply",
+    "difficulty": "Medium",
+    "questionType": "MCQ",
+    "description": "二重积分积分次序交换"
+  },
+  {
+    "questionId": "Q6",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Apply",
+    "difficulty": "Medium",
+    "questionType": "MCQ",
+    "description": "定积分物理应用（引力做功计算）"
+  },
+  {
+    "questionId": "Q7",
+    "knowledgeType": "Conceptual",
+    "bloomGoal": "Analyze",
+    "difficulty": "Hard",
+    "questionType": "MCQ",
+    "description": "函数可导性判别条件分析"
+  },
+  {
+    "questionId": "Q8",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Apply",
+    "difficulty": "Medium",
+    "questionType": "MCQ",
+    "description": "矩阵特征值符号判别"
+  },
+  {
+    "questionId": "Q9",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Apply",
+    "difficulty": "Medium",
+    "questionType": "MCQ",
+    "description": "矩阵初等行变换性质应用"
+  },
+  {
+    "questionId": "Q10",
+    "knowledgeType": "Conceptual",
+    "bloomGoal": "Analyze",
+    "difficulty": "Hard",
+    "questionType": "MCQ",
+    "description": "矩阵秩与线性方程组解的关系分析"
+  },
+  {
+    "questionId": "Q11",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Apply",
+    "difficulty": "Medium",
+    "questionType": "Blank",
+    "description": "反常积分计算与参数求解"
+  },
+  {
+    "questionId": "Q12",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Apply",
+    "difficulty": "Medium",
+    "questionType": "Blank",
+    "description": "曲线渐近线方程求解"
+  },
+  {
+    "questionId": "Q13",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Apply",
+    "difficulty": "Medium",
+    "questionType": "Blank",
+    "description": "变上限积分函数极大值计算"
+  },
+  {
+    "questionId": "Q14",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Apply",
+    "difficulty": "Hard",
+    "questionType": "Blank",
+    "description": "参数方程与变上限积分复合函数导数计算"
+  },
+  {
+    "questionId": "Q15",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Apply",
+    "difficulty": "Medium",
+    "questionType": "Blank",
+    "description": "一阶齐次微分方程求解"
+  },
+  {
+    "questionId": "Q16",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Analyze",
+    "difficulty": "Hard",
+    "questionType": "Blank",
+    "description": "线性方程组通解构造（向量组线性相关性应用）"
+  },
+  {
+    "questionId": "Q17",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Apply",
+    "difficulty": "Medium",
+    "questionType": "Solution",
+    "description": "函数极限计算（等价无穷小与夹逼准则应用）"
+  },
+  {
+    "questionId": "Q18",
+    "knowledgeType": "Conceptual",
+    "bloomGoal": "Evaluate",
+    "difficulty": "Hard",
+    "questionType": "Solution",
+    "description": "函数连续性与可导性证明及导数计算"
+  },
+  {
+    "questionId": "Q19",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Apply",
+    "difficulty": "Medium",
+    "questionType": "Solution",
+    "description": "全微分求原函数与多元函数极值计算"
+  },
+  {
+    "questionId": "Q20",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Apply",
+    "difficulty": "Medium",
+    "questionType": "Solution",
+    "description": "二重积分计算（积分区域化简与坐标变换）"
+  },
+  {
+    "questionId": "Q21",
+    "knowledgeType": "Conceptual",
+    "bloomGoal": "Evaluate",
+    "difficulty": "Hard",
+    "questionType": "Solution",
+    "description": "导函数严格单调性充分必要条件证明"
+  },
+  {
+    "questionId": "Q22",
+    "knowledgeType": "Procedural",
+    "bloomGoal": "Analyze",
+    "difficulty": "Hard",
+    "questionType": "Solution",
+    "description": "矩阵合同性质应用与正交矩阵构造"
+  }
+]

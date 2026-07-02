@@ -1,0 +1,56 @@
+[
+  {
+    "id": "一",
+    "name": "关系数据库分析题",
+    "description": 102,
+    "subQuestions": [
+      26,
+      28,
+      22
+    ],
+    "total": 178
+  },
+  {
+    "id": "二",
+    "name": "SQL查询与操作题",
+    "description": 85,
+    "subQuestions": [
+      32,
+      45,
+      28,
+      35,
+      30,
+      25,
+      38,
+      42
+    ],
+    "total": 360
+  },
+  {
+    "id": "三",
+    "name": "存储过程与编程题",
+    "description": 65,
+    "subQuestions": [
+      55,
+      48,
+      35,
+      42,
+      38,
+      30,
+      45
+    ],
+    "total": 358
+  },
+  {
+    "id": "四",
+    "name": "数据库设计综合题",
+    "description": 120,
+    "subQuestions": [
+      65,
+      72,
+      95,
+      40
+    ],
+    "total": 392
+  }
+]
