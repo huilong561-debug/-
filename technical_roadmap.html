@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>技术路线图 - 试卷质量评估系统</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body { 
+            font-family: 'Microsoft YaHei', 'PingFang SC', Arial, sans-serif; 
+            background: #f5f5f5; 
+            margin: 0; 
+            padding: 10px; 
+        }
+        .container { 
+            max-width: 1220px; 
+            margin: 0 auto; 
+            background: white; 
+            border-radius: 10px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1); 
+            padding: 14px; 
+        }
+        svg { display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <svg id="roadmap"></svg>
+    </div>
+    
+    <script>
+        const W = 1190, H = 750;
+        const colW = 370, colGap = 24, colPad = 12;
+        const col1X = 14;
+        const col2X = col1X + colW + colGap;
+        const col3X = col2X + colW + colGap;
+
+        const svg = d3.select("#roadmap").attr("width", W).attr("height", H);
+
+        svg.append("defs").append("marker")
+            .attr("id", "arrow").attr("viewBox", "0 -5 10 10")
+            .attr("refX", 8).attr("refY", 0)
+            .attr("markerWidth", 6).attr("markerHeight", 6).attr("orient", "auto")
+            .append("path").attr("d", "M0,-4L8,0L0,4").attr("fill", "#555");
+
+        const palette = {
+            blue:   { bg: "#e3f2fd", fg: "#42a5f5" },
+            orange: { bg: "#fef3e2", fg: "#ff9800" },
+            green:  { bg: "#e8f5e9", fg: "#66bb6a" }
+        };
+
+        function drawColumn(parent, cx, title, subtitle, layers, color) {
+            const boxY = 6, boxH = H - 12;
+            const g = parent.append("g");
+
+            g.append("rect")
+                .attr("x", cx).attr("y", boxY).attr("width", colW).attr("height", boxH)
+                .attr("fill", color.bg).attr("stroke", "#bbb").attr("stroke-width", 1.5)
+                .attr("stroke-dasharray", "6,3").attr("rx", 8);
+
+            g.append("text")
+                .attr("x", cx + colPad).attr("y", boxY + 20)
+                .attr("font-size", "14px").attr("font-weight", "700").attr("fill", "#333")
+                .text(title);
+
+            const barY = boxY + 30, barH = 16;
+            g.append("rect")
+                .attr("x", cx + colPad).attr("y", barY)
+                .attr("width", colW - 2 * colPad).attr("height", barH)
+                .attr("fill", "#fff").attr("stroke", "#ccc").attr("stroke-width", 1).attr("rx", 3);
+            g.append("text")
+                .attr("x", cx + colW / 2).attr("y", barY + barH / 2 + 3.5)
+                .attr("font-size", "9px").attr("fill", "#555")
+                .attr("text-anchor", "middle").text(subtitle);
+
+            const startY = barY + barH + 8;
+            const endY = boxY + boxH - 8;
+            const available = endY - startY;
+            const gap = 10;
+            const n = layers.length;
+            const layerH = (available - (n - 1) * gap) / n;
+            const mw = colW - 2 * colPad;
+
+            layers.forEach((layer, i) => {
+                const ly = startY + i * (layerH + gap);
+                drawModule(g, cx + colPad, ly, mw, layerH, layer.name, layer.details, color.fg);
+
+                if (i < n - 1) {
+                    const ax = cx + colW / 2;
+                    const ay1 = ly + layerH;
+                    const ay2 = ly + layerH + gap;
+                    g.append("path")
+                        .attr("d", `M ${ax} ${ay1} L ${ax} ${ay2}`)
+                        .attr("fill", "none").attr("stroke", "#555").attr("stroke-width", 1.5)
+                        .attr("marker-end", "url(#arrow)");
+                }
+            });
+        }
+
+        function drawModule(parent, x, y, w, h, title, content, bgColor) {
+            const padY = 6;
+            const g = parent.append("g");
+
+            g.append("rect")
+                .attr("x", x + 1.5).attr("y", y + 1.5).attr("width", w).attr("height", h)
+                .attr("fill", "rgba(0,0,0,0.08)").attr("rx", 5);
+            g.append("rect")
+                .attr("x", x).attr("y", y).attr("width", w).attr("height", h)
+                .attr("fill", bgColor).attr("stroke", "rgba(0,0,0,0.15)").attr("stroke-width", 1).attr("rx", 5);
+
+            const lines = content ? content.split('\n') : [];
+            const total = 1 + lines.length;
+            const innerH = h - 2 * padY;
+            const lh = innerH / (total + 0.5);
+            const sy = y + padY + lh * 0.75;
+
+            g.append("text")
+                .attr("x", x + w / 2).attr("y", sy)
+                .attr("font-size", "13px").attr("font-weight", "bold")
+                .attr("fill", "#fff").attr("text-anchor", "middle").text(title);
+
+            lines.forEach((line, i) => {
+                g.append("text")
+                    .attr("x", x + w / 2).attr("y", sy + (i + 1) * lh)
+                    .attr("font-size", "10px").attr("fill", "#fff").attr("opacity", 0.92)
+                    .attr("text-anchor", "middle").text(line);
+            });
+        }
+
+        // ===== 第一列 =====
+        drawColumn(svg, col1X,
+            "一、多智能体协同的试卷生成",
+            "输入约束 → 建模适配 → 多智能体生成 → 迭代优化 → 输出交付",
+            [
+                { name: "输入层", details: "素材类：讲义、示例试题、学科主题\n约束类：难度、学习目标、学生特征\n格式类：题型要求、输出结构" },
+                { name: "建模层", details: "Skill-Tree、认知+动机双维度、知识组件\n刻画学习者差异\n布鲁姆分类法、认知需求类型\n定义试题的认知适配目标" },
+                { name: "生成层", details: "调度智能体：将生成任务拆解为子任务\n生成类智能体：基于建模结果产出试题主体\n包括：题干、选项、解释/解题步骤" },
+                { name: "优化层", details: "质量评估\n基于评估反馈优化试题\n辅助智能体筛选：认知适配、质量达标\n避免冗余或低质内容" },
+                { name: "输出层", details: "统一试题格式\n输出完整试卷/试题集\n包含：题干、选项、答案、解释、来源标注" }
+            ],
+            palette.blue
+        );
+
+        // ===== 第二列 =====
+        drawColumn(svg, col2X,
+            "二、多维特征建模与自动评估方法",
+            "文件解析 → AI提取 → 多维建模 → 规则评分 → 缺陷检测 → 可视化 → 智能优化",
+            [
+                { name: "文件解析层", details: "PDF/Excel/TXT文件上传与解析\n使用PyPDF2、pandas进行文本提取\n试卷内容结构化处理" },
+                { name: "AI提取层", details: "DeepSeek API（qwen3-max）\n语义理解和知识点提取\nQwen1.5-14B-Chat微调模型\n难度分类（准确率81.7%）" },
+                { name: "多维特征建模层", details: "知识点覆盖建模（知识图谱）\n认知领域建模（布鲁姆分类法）\n形式规范建模、难度分布建模" },
+                { name: "规则评分层", details: "基于知识点/认知/形式规范维度评分\n综合评分 0-100 分" },
+                { name: "缺陷检测层", details: "检测知识点覆盖缺陷\n检测认知维度失衡\n检测形式规范问题" },
+                { name: "可视化展示层", details: "网格树图、平行集合图\n环形图、雷达图、瀑布图\n使用D3.js实现交互式可视化" },
+                { name: "智能优化层", details: "基于评估结果AI生成替代题目\n多智能体协同优化\n迭代优化（最多2次）" }
+            ],
+            palette.orange
+        );
+
+        // ===== 第三列 =====
+        drawColumn(svg, col3X,
+            "三、人机协同试卷批改与智能诊断",
+            "数据采集 → 预处理 → AI建模 → 人机协同优化 → 诊断/评分输出",
+            [
+                { name: "数据采集层", details: "答题数据：试卷答案、成绩\n特征数据：年龄、专业\n领域数据：学科知识图谱、评分标准\n教学目标、历史标注数据" },
+                { name: "数据预处理层", details: "数据清洗\n剔除异常值\n补全缺失数据" },
+                { name: "AI建模层", details: "试卷批改建模：\n选择适配模型，训练/调优模型\n输出初步评分结果及置信度\n学习诊断建模：\n认知诊断、行为诊断、风险诊断" },
+                { name: "人机协同优化层", details: "低置信度样本筛选\n人类干预\n模型迭代：将人类修正数据作为\n增量训练集，微调AI模型" },
+                { name: "结果输出层", details: "试卷批改输出\n学习诊断输出" }
+            ],
+            palette.green
+        );
+    </script>
+</body>
+</html>

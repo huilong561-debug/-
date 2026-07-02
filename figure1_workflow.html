@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>图 1 系统流程图 — 大纲覆盖度评估</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+        background: #fff;
+        font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Source Han Sans CN", "Noto Sans CJK SC", sans-serif;
+        color: #1a1a1a;
+        -webkit-font-smoothing: antialiased;
+    }
+    .canvas {
+        position: relative;
+        width: 1600px;
+        height: 620px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 32px 28px;
+    }
+    .stage-label {
+        position: absolute;
+        top: 18px;
+        font-size: 13px;
+        letter-spacing: 1px;
+        font-weight: 600;
+        color: #888;
+        text-transform: uppercase;
+    }
+    .node {
+        position: absolute;
+        border-radius: 10px;
+        padding: 14px 18px;
+        text-align: center;
+        background: #fff;
+        border: 2px solid #ddd;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        font-size: 15px;
+        line-height: 1.5;
+    }
+    .node .title { font-weight: 700; font-size: 16px; margin-bottom: 4px; }
+    .node .sub   { font-size: 13px; color: #555; }
+    .node .aux   { font-size: 12px; color: #888; margin-top: 4px; }
+
+    /* —— 阶段配色 —— */
+    .s1 { background: #E8F0FE; border-color: #1A73E8; }
+    .s1 .title { color: #1A73E8; }
+    .s2 { background: #E6F4EA; border-color: #1E8E3E; }
+    .s2 .title { color: #1E8E3E; }
+    .s3 { background: #F3E8FD; border-color: #8430CE; }
+    .s3 .title { color: #8430CE; }
+    .s4 { background: #FEF7E0; border-color: #E37400; }
+    .s4 .title { color: #E37400; }
+    /* ⑤ 可视化输出：用更深的红色边框与微阴影，体现"主视图" */
+    .s5 {
+        background: #FCE8E6;
+        border-color: #D93025;
+        border-width: 3px;
+        box-shadow: 0 3px 10px rgba(217,48,37,0.15);
+    }
+    .s5 .title { color: #B71C1C; font-size: 17px; }
+    .s5 .badge {
+        display: inline-block;
+        background: #D93025;
+        color: #fff;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 2px 7px;
+        border-radius: 3px;
+        margin-right: 6px;
+        letter-spacing: 0.5px;
+        vertical-align: middle;
+    }
+    .s6 { background: #F1F3F4; border-color: #5F6368; border-style: dashed; }
+    .s6 .title { color: #3C4043; }
+
+    /* —— 节点定位 —— */
+    .n-syllabus { left:  40px; top:  90px; width: 170px; height: 78px; }
+    .n-paper    { left:  40px; top: 200px; width: 170px; height: 78px; }
+    .n-parse    { left: 270px; top: 140px; width: 200px; height: 92px; }
+    .n-align    { left: 530px; top: 140px; width: 210px; height: 92px; }
+    .n-map      { left: 800px; top: 140px; width: 200px; height: 92px; }
+
+    .n-c1 { left: 1060px; top:  60px; width: 230px; height: 78px; }
+    .n-c2 { left: 1060px; top: 150px; width: 230px; height: 78px; }
+    .n-c3 { left: 1060px; top: 240px; width: 230px; height: 78px; }
+
+    /* 主视图输出节点 — 略大、更突出 */
+    .n-vis { left: 1350px; top: 115px; width: 230px; height: 145px; }
+
+    .n-human { left: 530px; top: 420px; width: 470px; height: 88px; }
+
+    /* 阶段标签位置 */
+    .label-1 { left:  60px; }
+    .label-2 { left: 290px; }
+    .label-3 { left: 550px; }
+    .label-4 { left: 1110px; }
+    .label-5 { left: 1370px; }
+
+    /* —— SVG 箭头层 —— */
+    svg.arrows {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        pointer-events: none;
+        z-index: 0;
+    }
+    .node { z-index: 1; }
+
+    /* 图题 */
+    .caption {
+        text-align: center;
+        font-size: 14px;
+        color: #333;
+        margin: 12px auto 40px;
+        font-weight: 500;
+    }
+</style>
+</head>
+<body>
+
+<div class="canvas">
+    <!-- 阶段标签 -->
+    <div class="stage-label label-1">① 输入</div>
+    <div class="stage-label label-2">② 解析</div>
+    <div class="stage-label label-3">③ 语义对齐</div>
+    <div class="stage-label label-4">④ 三层指标</div>
+    <div class="stage-label label-5">⑤ 可视化</div>
+
+    <!-- 箭头 -->
+    <svg class="arrows" viewBox="0 0 1600 620" preserveAspectRatio="none">
+        <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5"
+                    markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" fill="#555" />
+            </marker>
+            <marker id="arrow-dash" viewBox="0 0 10 10" refX="9" refY="5"
+                    markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" fill="#888" />
+            </marker>
+            <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5"
+                    markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" fill="#D93025" />
+            </marker>
+        </defs>
+
+        <!-- 主线箭头 (实线) -->
+        <line x1="210" y1="129" x2="270" y2="170" stroke="#555" stroke-width="2" marker-end="url(#arrow)" />
+        <line x1="210" y1="239" x2="270" y2="200" stroke="#555" stroke-width="2" marker-end="url(#arrow)" />
+        <line x1="470" y1="186" x2="530" y2="186" stroke="#555" stroke-width="2" marker-end="url(#arrow)" />
+        <line x1="740" y1="186" x2="800" y2="186" stroke="#555" stroke-width="2" marker-end="url(#arrow)" />
+        <line x1="1000" y1="186" x2="1060" y2="99"  stroke="#555" stroke-width="2" marker-end="url(#arrow)" />
+        <line x1="1000" y1="186" x2="1060" y2="189" stroke="#555" stroke-width="2" marker-end="url(#arrow)" />
+        <line x1="1000" y1="186" x2="1060" y2="279" stroke="#555" stroke-width="2" marker-end="url(#arrow)" />
+        <!-- 三指标 → 可视化（红色加粗以强调矩形树图为主视图） -->
+        <line x1="1290" y1="99"  x2="1350" y2="160" stroke="#D93025" stroke-width="2.5" marker-end="url(#arrow-red)" />
+        <line x1="1290" y1="189" x2="1350" y2="186" stroke="#D93025" stroke-width="2.5" marker-end="url(#arrow-red)" />
+        <line x1="1290" y1="279" x2="1350" y2="215" stroke="#D93025" stroke-width="2.5" marker-end="url(#arrow-red)" />
+
+        <!-- 人在回路反馈 (虚线) -->
+        <path d="M 1465 260 L 1465 360 L 1000 360 L 1000 420"
+              fill="none" stroke="#888" stroke-width="2" stroke-dasharray="6,4"
+              marker-end="url(#arrow-dash)" />
+        <text x="1230" y="354" fill="#666" font-size="13" font-weight="600">教师诊断反馈</text>
+
+        <path d="M 635 420 L 635 380 L 635 380 L 635 232"
+              fill="none" stroke="#888" stroke-width="2" stroke-dasharray="6,4"
+              marker-end="url(#arrow-dash)" />
+        <text x="510" y="392" fill="#666" font-size="12">映射修正</text>
+
+        <path d="M 900 420 L 900 380 L 1175 380 L 1175 318"
+              fill="none" stroke="#888" stroke-width="2" stroke-dasharray="6,4"
+              marker-end="url(#arrow-dash)" />
+        <text x="1015" y="372" fill="#666" font-size="12">达标阈值调节</text>
+    </svg>
+
+    <!-- 节点 -->
+    <div class="node s1 n-syllabus">
+        <div class="title">教学大纲</div>
+        <div class="sub">章节 · 重点 · 描述</div>
+    </div>
+    <div class="node s1 n-paper">
+        <div class="title">试卷文档</div>
+        <div class="sub">PDF / Excel / TXT</div>
+    </div>
+
+    <div class="node s2 n-parse">
+        <div class="title">文档解析</div>
+        <div class="sub">PyPDF2 &nbsp;+&nbsp; pandas<br>结构化抽取</div>
+    </div>
+
+    <div class="node s3 n-align">
+        <div class="title">语义对齐</div>
+        <div class="sub">Qwen3-Max LLM<br>题目 ↔ 知识点</div>
+    </div>
+
+    <div class="node s3 n-map">
+        <div class="title">三元映射</div>
+        <div class="sub">题目 — 知识点 — 章节</div>
+    </div>
+
+    <div class="node s4 n-c1">
+        <div class="title">章节覆盖率</div>
+        <div class="sub">已考章节占总章节比例</div>
+    </div>
+    <div class="node s4 n-c2">
+        <div class="title">重点达成率</div>
+        <div class="sub">每章重点覆盖度的均值</div>
+    </div>
+    <div class="node s4 n-c3">
+        <div class="title">知识点达成率</div>
+        <div class="sub">每章全部知识点覆盖度的均值</div>
+    </div>
+
+    <div class="node s5 n-vis">
+        <div class="title"><span class="badge">主视图</span>矩形树图</div>
+        <div class="sub">章节分值 · 覆盖深度<br>知识点 — 题目对应</div>
+        <div class="aux">辅助：双折线图、雷达图</div>
+    </div>
+
+    <div class="node s6 n-human">
+        <div class="title">人在回路反馈</div>
+        <div class="sub">教师在前端面板修正大语言模型误对齐的题目映射，并按机构标准调节达标阈值，触发指标与三视图级联重绘</div>
+    </div>
+</div>
+
+<div class="caption">图 1　基于教学大纲覆盖度的试卷质量评估系统流程</div>
+
+</body>
+</html>

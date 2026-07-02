@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>试卷覆盖度可视化评估系统</title>
+    
+    <link rel="stylesheet" href="style.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- KaTeX：用于渲染候选题目中的 LaTeX 公式（$...$、$$...$$、\(...\)、\[...\]） -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+    <!-- 系统标题 -->
+    <div class="system-header">
+        <h1>试卷覆盖度可视化评估系统</h1>
+    </div>
+
+    <!-- 三栏布局 -->
+    <div class="main-container">
+        <!-- 左侧面板：评估维度选择 -->
+        <div class="left-panel">
+            <!-- 文件选择 -->
+            <div class="file-selection" style="margin-bottom: 10px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                    <span style="font-size: 11px; font-weight: 500; color: #333; min-width: 35px;">试卷</span>
+                    <input type="file" id="fileInput" accept=".xlsx,.xls,.pdf,.txt,.png,.jpg,.jpeg" style="position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden;">
+                    <label for="fileInput" class="file-picker-btn">选择</label>
+                    <span id="fileInputName" class="file-picker-name">未选择文件</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                    <span style="font-size: 11px; font-weight: 500; color: #333; min-width: 35px;">大纲</span>
+                    <input type="file" id="syllabusInput" accept=".xlsx,.xls,.pdf,.txt,.png,.jpg,.jpeg" style="position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden;">
+                    <label for="syllabusInput" class="file-picker-btn">选择</label>
+                    <span id="syllabusInputName" class="file-picker-name">未选择文件</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 11px; font-weight: 500; color: #333; min-width: 35px;">数据</span>
+                    <select id="dataSourceSelect" class="data-source-select" style="font-size: 10px; padding: 3px; flex: 1;">
+                        <option value="default">默认数据</option>
+                        <option value="custom">自定义数据</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 评估维度区：大纲覆盖度的三个子视图（与右侧雷达图三个轴一一对应） -->
+            <div class="evaluation-metrics">
+                <div class="coverage-view-tabs" style="display:flex; flex-direction:column; gap:3px; margin-bottom:6px;">
+                    <div class="metric-item active" data-coverage-view="chapter-rate"
+                         style="padding:4px 6px; font-size:11.5px; line-height:1.2;">章节覆盖率</div>
+                    <div class="metric-item" data-coverage-view="compliance-rate"
+                         style="padding:4px 6px; font-size:11.5px; line-height:1.2;">重点达成率</div>
+                    <div class="metric-item" data-coverage-view="keypoint-rate"
+                         style="padding:4px 6px; font-size:11.5px; line-height:1.2;">知识点达成率</div>
+                </div>
+                
+                <!-- 维度环形图（认知分析时显示） -->
+                <div class="line-chart-section" id="dimension-donut-chart" style="display: none; margin-top: 5px;">
+                    <h4 id="dimension-donut-title" style="margin-bottom: 8px; font-size: 14px; color: #333;">维度分布</h4>
+                    <div class="donut-chart-container" style="position: relative;">
+                        <svg viewBox="0 0 400 320" class="donut-svg" id="dimension-donut-svg" style="margin: 0; padding: 0;"></svg>
+                    </div>
+                    <!-- Stats Area -->
+                    <div id="cognitive-stats-display" style="margin-top: 5px;"></div>
+                    <div id="cognitive-formula-summary" class="formula-summary" style="margin-top: 6px;"></div>
+                    <!-- Defects Display -->
+                    <div id="cognitive-defects" class="defects-display" style="margin-top: 6px; display: none;"></div>
+                </div>
+                
+                <!-- 知识覆盖折线图 -->
+                <div class="line-chart-section line-knowledge-line-chart" id="knowledge-line-chart">
+                    <h4>覆盖度折线图</h4>
+                    <div class="line-chart-container" style="position: relative;">
+                        <!-- Legend -->
+                        <div class="chart-legend" style="position: absolute; top: 12px; left: 12px; display: flex !important; flex-direction: column; gap: 4px; z-index: 10; padding: 0; margin: 0; background: none; border: none;">
+                            <div class="legend-item" style="display: flex !important; align-items: center; gap: 6px; padding: 2px 4px; background: none; border: none; font-size: 11px; font-weight: bold; color: #333;">
+                                <span class="legend-line actual" id="line-legend-primary-swatch" style="width: 20px; height: 2px; background: #2196f3; border-radius: 1px;"></span>
+                                <span id="line-legend-primary-text">实线：每章实际知识点数</span>
+                            </div>
+                            <div class="legend-item" style="display: flex !important; align-items: center; gap: 6px; padding: 2px 4px; background: none; border: none; font-size: 11px; font-weight: bold; color: #333;">
+                                <span class="legend-line key-points" id="line-legend-secondary-swatch" style="width: 20px; height: 2px; background: #ff6384; border-radius: 1px; background-image: repeating-linear-gradient(90deg, #ff6384 0px, #ff6384 2px, transparent 2px, transparent 4px);"></span>
+                                <span id="line-legend-secondary-text">虚线：每章重点知识点数</span>
+                            </div>
+                        </div>
+                        
+                        <div class="line-chart" style="margin: 0; padding: 0;">
+                            <div class="chart-area" style="margin: 0; padding: 0;">
+                                <svg viewBox="0 -70 400 220" class="line-svg" id="knowledge-coverage-chart" style="margin: 0; padding: 0; display: block;">
+                                    <!-- Axes (dynamic) -->
+                                    <g id="chart-axes"></g>
+                                    
+                                    <!-- Y-axis ticks and labels (dynamic) -->
+                                    <g id="y-axis-labels"></g>
+                                    
+                                    <!-- X-axis ticks and labels (dynamic) -->
+                                    <g id="x-axis-labels"></g>
+                                    
+                                    <!-- Grid lines (dynamic) -->
+                                    <g id="grid-lines"></g>
+                                    
+                                    <!-- Solid line: Actual P_k count -->
+                                    <polyline id="actual-pk-line" points="" stroke="#2196f3" stroke-width="2" fill="none"/>
+                                    
+                                    <!-- Dashed line: Key points count -->
+                                    <polyline id="key-points-line" points="" stroke="#ff6384" stroke-width="2" stroke-dasharray="5,5" fill="none"/>
+                                    
+                                    <!-- Data points -->
+                                    <g id="data-points"></g>
+                                </svg>
+                            </div>
+                        </div>
+                        <!-- Stats Area -->
+                        <div class="knowledge-stats-section" style="margin-top: 5px;">
+                            <div class="stats-info">
+                                <div class="stats-text" id="knowledge-stats-display">
+                                </div>
+                            </div>
+                            <div id="knowledge-formula-summary" class="formula-summary"></div>
+                            <!-- Defects Display -->
+                            <div id="knowledge-defects" class="defects-display" style="margin-top: 6px; display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 题目篇幅瀑布图（形式分析时显示） -->
+                <div class="line-chart-section" id="question-stack-chart" style="display: none; margin-top: 10px;">
+                    <h4>篇幅分布</h4>
+                    <div class="stack-chart-container" style="position: relative;">
+                        <svg viewBox="0 0 500 500" class="stack-svg" id="question-stack-svg" style="width: 100%; height: auto; display: block;">
+                            <!-- Axes and chart generated by JavaScript -->
+                        </svg>
+                        <!-- Legend -->
+                        <div class="chart-legend" style="position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%); display: flex; gap: 15px; font-size: 11px; font-weight: 500; white-space: nowrap;">
+                            <div class="legend-item" style="display: flex; align-items: center; gap: 5px; padding: 3px 8px; background: rgba(255,255,255,0.9); border-radius: 4px;">
+                                <span style="width: 12px; height: 12px; background: #ffb74d; border-radius: 2px; display: inline-block; flex-shrink: 0;"></span>
+                                <span style="white-space: nowrap;">题干</span>
+                            </div>
+                            <div class="legend-item" style="display: flex; align-items: center; gap: 5px; padding: 3px 8px; background: rgba(255,255,255,0.9); border-radius: 4px;">
+                                <span style="white-space: nowrap;">子题：</span>
+                                <span style="width: 50px; height: 12px; background: linear-gradient(to right, #b2dfdb, #00695c); border-radius: 2px; display: inline-block; flex-shrink: 0;"></span>
+                                <span style="white-space: nowrap; font-size: 9px; color: #666;">字数 少 → 多</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Stats Area -->
+                    <div style="margin-top: 5px;">
+                        <div id="format-stats-display"></div>
+                        <div id="format-formula-summary" class="formula-summary" style="margin-top: 6px;"></div>
+                        <!-- Defects Display -->
+                        <div id="format-defects" class="defects-display" style="margin-top: 6px; display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 中间面板：可视化主区 -->
+        <div class="middle-panel">
+            <!-- 顶部标题（知识覆盖时显示） -->
+            <div class="middle-panel-header" id="knowledge-header">
+                <h3>知识覆盖树图</h3>
+                <!-- 图例 -->
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <span class="legend-color question-color"></span>
+                        <span>题目</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color knowledge-color"></span>
+                        <span>知识点</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 知识覆盖树图 -->
+            <div class="chart-section" id="knowledge-grid">
+                <div class="grid-chart-container" style="width: 100%; height: 450px; background: transparent;">
+                    <!-- SVG 树图由 JS 动态生成 -->
+                </div>
+                
+                <!-- 覆盖详情 -->
+                <div class="chapter-content-section">
+                    <h4>覆盖详情</h4>
+                    <div class="content-output" id="chapter-content-display">
+                        <!-- 默认：树图说明；点击格子查看章节详情 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 多维分析（平行集图） -->
+            <div class="chart-section" id="cognitive-heatmap" style="display: none; height: 100%;">
+                <div class="php-container" id="php-chart-container" style="width: 100%; flex-grow: 1; background: #fff; position: relative; min-height: 0;">
+                    <svg id="php-chart" style="width: 100%; height: 100%;"></svg>
+                </div>
+                
+                <!-- 分析说明 -->
+                <div class="cognitive-content-section" style="margin-top: 10px; padding: 10px; background: #f9f9f9; border-radius: 4px; border: 1px solid #eee;">
+                    <div class="content-output" id="cognitive-content-display" style="font-size: 13px; color: #555; line-height: 1.6;">
+                        <p style="margin: 0 0 6px 0;">
+                            <strong style="color: #1565C0;">📊 平行集图：</strong>
+                        </p>
+                        <p style="margin: 0 0 4px 12px;">• <strong>坐标轴：</strong>每条轴对应一个维度（题型 / Bloom / 难度 / 形式）</p>
+                        <p style="margin: 0 0 4px 12px;">• <strong>节点：</strong>每个节点表示一个取值，括号内为题目数量</p>
+                        <p style="margin: 0 0 4px 12px;">• <strong>流宽：</strong>连线宽度对应题目数量</p>
+                        <p style="margin: 0 0 4px 12px;">• <strong>流色：</strong>按主轴上色，点击轴标题可切换主轴</p>
+                        <p style="margin: 0; color: #888; font-size: 11px; font-style: italic;">
+                            💡 提示：点击流条查看详情；点击图例可筛选
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 形式与篇幅表 -->
+            <div class="chart-section" id="format-bar-chart">
+                <h3>形式与篇幅</h3>
+                <div class="format-table-container">
+                    <table class="format-table">
+                        <thead>
+                            <tr>
+                                <th>编号</th>
+                                <th>原题</th>
+                                <th>错误类型</th>
+                                <th>问题描述</th>
+                                <th>修订建议</th>
+                                <th>改进点</th>
+                            </tr>
+                        </thead>
+                        <tbody id="format-table-body">
+                            <tr>
+                                <td colspan="5" style="text-align: center; color: #888;">暂无形式分析数据</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- 导出按钮 -->
+                <div class="export-btn-container" style="margin-top: 15px; text-align: right;">
+                    <button id="export-corrections-btn" class="export-btn" style="padding: 8px 20px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 13px;">
+                        导出修订建议
+                    </button>
+                </div>
+                <!-- 篇幅 vs 错误数图 -->
+                <div class="scatter-chart-container" style="margin-top: 20px; padding: 10px 15px; background: white; border: 1px solid #ccc; border-radius: 0;">
+                    <h4 style="font-size: 14px; color: #000; margin-bottom: 8px; text-align: center;">篇幅 vs 错误数</h4>
+                    <div id="format-scatter-chart" style="width: 100%; height: 280px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 右侧面板：雷达图 / 修改建议 / 摘要 -->
+        <div class="right-panel">
+            <!-- 雷达图 -->
+            <div class="radar-section" style="margin-bottom: 0; padding-bottom: 0;">
+                <h3 style="margin-bottom: 2px;">大纲覆盖雷达图</h3>
+                <div class="radar-chart-container" style="position: relative; display: flex; justify-content: center; padding: 0; width: 100%; overflow: visible;">
+                    <div class="radar-chart" style="padding: 0; width: 100%; display: flex; justify-content: center;">
+                        <svg viewBox="-30 -40 260 280" class="radar-svg" id="radar-svg" style="width: 100%; max-width: 700px; height: 220px; overflow: visible;">
+                            <!-- Radar chart generated by JavaScript -->
+                        </svg>
+                    </div>
+                    <!-- Legend -->
+                    <div class="radar-legend" style="position: absolute; top: 0; right: 0; display: flex; flex-direction: column; gap: 6px; z-index: 10;">
+                        <div class="legend-item" style="display: flex; align-items: center; gap: 5px; padding: 3px 6px; background: rgba(255,255,255,0.9); border: 1px solid #ccc; font-size: 11px;">
+                            <span style="width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-bottom: 7px solid #4caf50; display: inline-block;"></span>
+                            <span style="font-weight: 500; color: #333;">优秀</span>
+                        </div>
+                        <div class="legend-item" style="display: flex; align-items: center; gap: 5px; padding: 3px 6px; background: rgba(255,255,255,0.9); border: 1px solid #ccc; font-size: 11px;">
+                            <span style="width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-bottom: 7px solid #ff9800; display: inline-block;"></span>
+                            <span style="font-weight: 500; color: #333;">合格</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 评分规则面板 -->
+                <div class="radar-rule-panel" id="radar-rule-panel" style="margin-top: 0; padding: 4px 6px;">
+                    <div class="radar-rule-header" id="radar-rule-title" style="margin-bottom: 2px; font-size: 10px;">覆盖度评分规则</div>
+                    <div id="radar-rule-content"></div>
+                    <div class="radar-rule-buttons" style="margin-top: 3px; gap: 4px;">
+                        <button id="radar-apply-rule-btn" class="radar-rule-btn" style="font-size: 10px; padding: 2px 6px;">应用</button>
+                        <button id="radar-reset-rule-btn" class="radar-rule-btn secondary" style="font-size: 10px; padding: 2px 6px;">重置</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 自我精修框架：AI 题目生成 -->
+            <div class="modification-section" style="margin-top: 0;">
+                <h3>编辑：<span id="edit-status" style="font-size: 11px; font-weight: normal; color: #666;"></span></h3>
+                <div class="modification-area">
+                    <textarea id="edit-suggestions" placeholder="生成题目以补齐本试卷的缺口或缺陷"></textarea>
+                </div>
+                <div class="modification-buttons" style="display: flex; gap: 8px;">
+                    <button id="edit-generate-btn" class="mod-btn generate-btn">生成</button>
+                    <button id="edit-accept-btn" class="mod-btn accept-btn">采纳</button>
+                </div>
+                
+                <!-- 候选题目区 -->
+                <div id="candidate-questions-area" class="questions-area" style="display: none; margin-top: 10px;">
+                    <div class="questions-header">
+                        <span class="questions-icon">📋</span>
+                        <span class="questions-title">候选题目：</span>
+                        <span id="preview-info" class="preview-info"></span>
+                    </div>
+                    <div id="candidate-questions-list" class="questions-list"></div>
+                </div>
+                
+                <!-- 已选题目区 -->
+                <div id="selected-questions-area" class="questions-area selected-area" style="display: none; margin-top: 10px;">
+                    <div class="questions-header">
+                        <span class="questions-icon">✅</span>
+                        <span class="questions-title">已选题目（<span id="selected-count">0</span>）：</span>
+                        <button id="edit-export-btn" class="export-btn">导出</button>
+                    </div>
+                    <div id="selected-questions-list" class="questions-list"></div>
+                </div>
+            </div>
+
+            <!-- 质量摘要 -->
+            <div class="summary-section">
+                <h3>质量摘要：</h3>
+                <div class="summary-content">
+                    <textarea placeholder="试卷整体质量摘要……"></textarea>
+                </div>
+                <div class="summary-buttons">
+                    <button class="summary-btn update-btn">更新</button>
+                    <button class="summary-btn export-btn">导出</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
