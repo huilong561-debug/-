@@ -114,6 +114,70 @@ const defaultRadarRuleConfig = {
 let radarRuleConfig = JSON.parse(JSON.stringify(defaultRadarRuleConfig));
 let currentRuleMetric = 'knowledge'; // 当前显示的规则指标
 
+// 纯前端部署（如 Vercel 静态站点）时的数据源候选
+const STATIC_DATA_SOURCE_CANDIDATES = [
+    'default',
+    '2025考研真题',
+    '2025考研数学真题',
+    'ai_zhangyu8',
+    'AI_数据结构',
+    '考研数学真题（英文）',
+    '数据库原理（中文）',
+    '数据库原理（英文）',
+    'ai_20260404_171823__20260404091829',
+    'ai_20260404_174357__20260404094402',
+    'ai_20260402_235013__20260402155020',
+    'ai_20260326_091013_25-2_20260326011021',
+    'ai_20260326_150101_A24-_20260326070108'
+];
+
+function getDataBasePath(dataSource = 'default') {
+    if (dataSource === '__root__') return '/data';
+    return encodeURI(`/data/${dataSource}`);
+}
+
+async function fetchJsonStrict(url, label) {
+    const response = await fetch(url);
+    if (!response.ok) {
+        const body = await response.text().catch(() => '');
+        throw new Error(`${label} 加载失败（${response.status}）: ${body.slice(0, 80)}`);
+    }
+    const text = await response.text();
+    try {
+        return JSON.parse(text);
+    } catch (error) {
+        throw new Error(`${label} 不是合法 JSON: ${text.slice(0, 80)}`);
+    }
+}
+
+async function detectStaticDataSources() {
+    const cacheBust = `?t=${Date.now()}`;
+    const checks = await Promise.all(
+        STATIC_DATA_SOURCE_CANDIDATES.map(async (source) => {
+            const basePath = getDataBasePath(source);
+            try {
+                const response = await fetch(`${basePath}/questionData.json${cacheBust}`);
+                return response.ok ? source : null;
+            } catch (error) {
+                return null;
+            }
+        })
+    );
+
+    const validSources = checks.filter(Boolean);
+    if (validSources.length > 0) return validSources;
+
+    // 兼容 /data 下直接放 json 文件（无子目录）的部署
+    try {
+        const rootRes = await fetch(`/data/questionData.json${cacheBust}`);
+        if (rootRes.ok) return ['__root__'];
+    } catch (error) {
+        // noop
+    }
+
+    return [];
+}
+
 // 初始化
 document.addEventListener('DOMContentLoaded', async function() {
     try {
@@ -134,66 +198,65 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 // 加载数据源列表
 async function loadDataSources() {
+    const formatDataSourceLabel = (source) => {
+        const map = {
+            // 英文示例数据集（保留兼容旧目录名）
+            en_default: '英文示例 - 默认',
+            en_2025_exam: '英文示例 - 2025 考研',
+            en_2026_zhang8_1: '英文示例 - 2026 张8（1）',
+            // 中文数据集
+            default: '默认数据集',
+            '2025考研真题': '2025 考研真题',
+            '2026张8（1）': '2026 张8（1）',
+            '__root__': '默认数据集（根目录）'
+        };
+        if (map[source]) return map[source];
+        if (/[\u4e00-\u9fff]/.test(source)) return source;
+        return source;
+    };
+
+    const updateDataSourceSelect = (sources) => {
+        const dataSourceSelect = document.getElementById('dataSourceSelect');
+        if (!dataSourceSelect) return;
+
+        dataSourceSelect.innerHTML = '';
+        sources.forEach(source => {
+            const option = document.createElement('option');
+            option.value = source;
+            option.textContent = formatDataSourceLabel(source);
+            dataSourceSelect.appendChild(option);
+        });
+
+        if (sources.length > 0) {
+            const preferred = sources.find(s => /[\u4e00-\u9fff]/.test(s) || s === 'default')
+                || sources[0];
+            dataSourceSelect.value = preferred;
+            currentDataSource = preferred;
+        }
+    };
+
     try {
         const response = await fetch('/api/data-sources');
+        if (!response.ok) {
+            throw new Error(`/api/data-sources ${response.status}`);
+        }
         const data = await response.json();
-        
-        const formatDataSourceLabel = (source) => {
-            const map = {
-                // 英文示例数据集（保留兼容旧目录名）
-                en_default: '英文示例 - 默认',
-                en_2025_exam: '英文示例 - 2025 考研',
-                en_2026_zhang8_1: '英文示例 - 2026 张8（1）',
-                // 中文数据集
-                default: '默认数据集',
-                '2025考研真题': '2025 考研真题',
-                '2026张8（1）': '2026 张8（1）'
-            };
-            if (map[source]) return map[source];
-            // 中文目录名直接展示
-            if (/[\u4e00-\u9fff]/.test(source)) {
-                return source;
-            }
-            return source;
-        };
-        
+
         if (data.success && data.data_sources) {
-            const dataSourceSelect = document.getElementById('dataSourceSelect');
-            if (dataSourceSelect) {
-                // 清空现有选项
-                dataSourceSelect.innerHTML = '';
-                
-                // 添加所有数据源选项
-                data.data_sources.forEach(source => {
-                    const option = document.createElement('option');
-                    option.value = source;
-                    option.textContent = formatDataSourceLabel(source);
-                    dataSourceSelect.appendChild(option);
-                });
-                
-                // 默认优先选用中文数据源
-                if (data.data_sources.length > 0) {
-                    const preferred = data.data_sources.find(s => /[\u4e00-\u9fff]/.test(s) || s === 'default')
-                        || data.data_sources[0];
-                    dataSourceSelect.value = preferred;
-                    currentDataSource = preferred;
-                }
-                
-                console.log('数据源列表加载完成:', data.data_sources);
-            }
+            updateDataSourceSelect(data.data_sources);
+            console.log('数据源列表加载完成:', data.data_sources);
         } else {
-            console.warn('数据源列表加载失败，将使用默认数据源。');
+            throw new Error('后端未返回数据源列表');
         }
     } catch (error) {
-        console.error('加载数据源列表失败:', error);
-        // 如果失败，至少保留默认选项
-        const dataSourceSelect = document.getElementById('dataSourceSelect');
-        if (dataSourceSelect && dataSourceSelect.options.length === 0) {
-            const option = document.createElement('option');
-            option.value = 'default';
-            option.textContent = '默认数据集';
-            dataSourceSelect.appendChild(option);
+        console.warn('后端数据源接口不可用，切换静态数据源模式:', error.message);
+        const staticSources = await detectStaticDataSources();
+        if (staticSources.length > 0) {
+            updateDataSourceSelect(staticSources);
+            console.log('静态数据源列表:', staticSources);
+            return;
         }
+        throw new Error('未检测到可用数据源。请确认 data 目录已上传且包含 JSON 数据文件。');
     }
 }
 
@@ -201,7 +264,7 @@ async function loadDataSources() {
 async function loadAllData(dataSource = 'default') {
     try {
         currentDataSource = dataSource;
-        const dataPath = `/data/${dataSource}`;
+        const dataPath = getDataBasePath(dataSource);
         const cacheBust = `?t=${Date.now()}`;
         console.log(`Loading data... source: ${dataSource}`);
         
@@ -215,12 +278,12 @@ async function loadAllData(dataSource = 'default') {
             questionDataData,
             questionLengthDataResult
         ] = await Promise.all([
-            fetch(`${dataPath}/questionContentMap.json${cacheBust}`).then(r => r.json()),
-            fetch(`${dataPath}/labelToQuestionId.json${cacheBust}`).then(r => r.json()),
-            fetch(`${dataPath}/formatImprovementData.json${cacheBust}`).then(r => r.json()),
-            fetch(`${dataPath}/chapterData.json${cacheBust}`).then(r => r.json()),
-            fetch(`${dataPath}/chapterKnowledgeMap.json${cacheBust}`).then(r => r.json()),
-            fetch(`${dataPath}/questionData.json${cacheBust}`).then(r => r.json()),
+            fetchJsonStrict(`${dataPath}/questionContentMap.json${cacheBust}`, 'questionContentMap.json'),
+            fetchJsonStrict(`${dataPath}/labelToQuestionId.json${cacheBust}`, 'labelToQuestionId.json'),
+            fetchJsonStrict(`${dataPath}/formatImprovementData.json${cacheBust}`, 'formatImprovementData.json'),
+            fetchJsonStrict(`${dataPath}/chapterData.json${cacheBust}`, 'chapterData.json'),
+            fetchJsonStrict(`${dataPath}/chapterKnowledgeMap.json${cacheBust}`, 'chapterKnowledgeMap.json'),
+            fetchJsonStrict(`${dataPath}/questionData.json${cacheBust}`, 'questionData.json'),
             // questionLengthData 为可选文件，加载失败时返回空数组
             fetch(`${dataPath}/questionLengthData.json${cacheBust}`)
                 .then(r => r.ok ? r.json() : [])
